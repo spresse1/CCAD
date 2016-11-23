@@ -63,10 +63,10 @@ In order to voice files, run (may require some path changes):
 
 ```
 # for FILE in $(find P_Suppl_23_DB/ -name "*.OUT" | \
-  awk -F. '{print $1}'); do gst-launch-1.0 filesrc location=${FILE}.OUT ! \
-  audioparse channels=1 rate=16000 raw-format=GST_AUDIO_FORMAT_S16LE ! \
-  audioconvert ! audioresample ! wavenc ! filesink \
-  location=TestAudio/Edited/VoiceWavs/$(basename ${FILE}).wav; done
+awk -F. '{print $1}'); do gst-launch-1.0 filesrc location=${FILE}.OUT ! \
+audioparse channels=1 rate=16000 raw-format=GST_AUDIO_FORMAT_S16LE ! \
+audioconvert ! audioresample ! wavenc ! filesink \
+location=TestAudio/Edited/VoiceWavs/$(basename ${FILE}).wav; done
 ```
 
 Then, in audacity, run the following chain on the new *.wav 
@@ -83,17 +83,18 @@ Finally, run the following (again, paths may need munging):
 
 ```
 # for FILE in $(find P_Suppl_23_DB -name "*.wav" | \
-  awk -F. '{print $1}'); do gst-launch-1.0 filesrc \
-  location=${FILE}.wav ! wavparse ! audioconvert ! audioresample ! \
-  audio/x-raw, rate=8000, format=S8 ! filesink \
-  location=P_Suppl_23_DB/$(basename ${FILE}).raw; done
+awk -F. '{print $1}'); do gst-launch-1.0 filesrc \
+location=${FILE}.wav ! wavparse ! audioconvert ! audioresample ! \
+audio/x-raw, rate=8000, format=S8 ! filesink \
+location=P_Suppl_23_DB/$(basename ${FILE}).raw; done
+```
 
 Next, on to the noise file.  The paper only used 
 P_Suppl_23_DB/Disk1/NOISE/WHITE.BGN as noise.  To transform it, run:
 
 ```
 # gst-launch-1.0 filesrc location=P_Suppl_23_DB/Disk1/NOISE/WHITE.BGN ! \
-  audioparse channels=1 rate=16000 raw-format=GST_AUDIO_FORMAT_S16LE ! \
-  audioconvert ! audioresample ! audio/x-raw, rate=8000, format=S8 ! \
-  filesink location=P_Suppl_23_DB/Disk1/NOISE/WHITE.raw
+audioparse channels=1 rate=16000 raw-format=GST_AUDIO_FORMAT_S16LE ! \
+audioconvert ! audioresample ! audio/x-raw, rate=8000, format=S8 ! \
+filesink location=P_Suppl_23_DB/Disk1/NOISE/WHITE.raw
 ```
